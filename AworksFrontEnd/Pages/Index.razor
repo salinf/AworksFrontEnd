@@ -1,0 +1,31 @@
+﻿@page "/"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<PageTitle>Index</PageTitle>
+
+@if (SalesCustomers == null)
+{
+    <p>No Items found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in SalesCustomers)
+        {
+            <li>Customer Id: @($"{item.CustomerId}"</li>
+            <li>Account Number: @item.AccountNumber</li>
+            <li>Row Guid: @item.rowguid)</li>
+        }
+    </ul>
+}
+
+@code {
+    private Person[]? People;
+    private SalesCustomer[]? SalesCustomers;
+
+    protected override async Task OnInitializedAsync() =>
+        SalesCustomers = await Http.GetFromJsonAsync<SalesCustomer[]>($"https://localhost:7009/api/SalesCustomer/GetAll?RowsPerPage=1&PageNumber=11");
+        
+}
